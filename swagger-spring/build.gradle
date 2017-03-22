@@ -1,0 +1,39 @@
+apply plugin: 'java'
+version '1.0-SNAPSHOT'
+apply plugin: 'maven'
+
+sourceCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+    jcenter()
+    mavenLocal()
+}
+
+configurations {
+    docGenConfig.extendsFrom(compile)
+}
+
+// This creates the jar only with module source code
+task jarWithModuleSource(type: Jar, dependsOn: classes) {
+    from sourceSets.main.output
+    classifier = 'main'
+}
+
+artifacts {
+    docGenConfig jarWithModuleSource
+}
+
+
+dependencies {
+    compile("io.swagger:swagger-servlet:1.5.7") {
+        exclude group: 'javax.ws.rs'
+        exclude module: 'jsr311-api'
+        exclude module: 'rs-api'
+        exclude module: 'swagger-jaxrs'
+        exclude module: 'swagger-jersey-jaxrs'
+    }
+    compile group: 'org.springframework', name: 'spring-web', version: '4.2.3.RELEASE'
+    compile("org.apache.httpcomponents:httpclient:4.4.1")
+    docGenConfig sourceSets.main.output
+}

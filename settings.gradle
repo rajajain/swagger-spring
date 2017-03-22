@@ -1,0 +1,3 @@
+rootProject.name = 'swagger-integration'
+include 'sample-swagger-spring'
+include 'swagger-spring'
